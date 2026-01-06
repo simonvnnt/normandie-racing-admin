@@ -1,0 +1,21 @@
+# Auth basique uniquement sur le HTML
+AuthType Basic
+AuthName "Accès restreint"
+AuthUserFile /homez.2000/vikingr/www/staging/.htpasswd
+Require valid-user
+
+# Exclure les fichiers statiques de l'auth pour que l'app Angular fonctionne
+<FilesMatch "\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico|map)$">
+  Satisfy any
+  Allow from all
+</FilesMatch>
+
+RewriteEngine On
+
+# Ne pas réécrire si c’est un fichier ou un répertoire existant
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^.*$ - [NC,L]
+
+# Rediriger tout le reste vers index.html
+RewriteRule ^.*$ index.html [NC,L]

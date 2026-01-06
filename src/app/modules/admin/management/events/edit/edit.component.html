@@ -1,0 +1,133 @@
+<div class="flex flex-auto flex-col overflow-y-auto p-6">
+    @if (event) {
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <!-- Title -->
+            <div class="mt-3 truncate text-4xl font-bold">
+                Événement #{{ event.id }}
+            </div>
+
+            <!-- Close button -->
+            <a mat-icon-button [routerLink]="['../']">
+                <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+            </a>
+        </div>
+
+        <!-- Content -->
+        <form class="flex w-full flex-col p-0 sm:p-6 gap-6" [formGroup]="eventForm">
+
+            <div class="flex flex-col gap-5">
+                <div>
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Nom</mat-label>
+                        <input matInput
+                               [formControlName]="'name'" />
+                    </mat-form-field>
+                </div>
+
+                <div class="flex flex-row items-center gap-4">
+                    <mat-form-field class="fuse-mat-dense w-full h-fit" [subscriptSizing]="'dynamic'">
+                        <mat-label>Date de début</mat-label>
+                        <input
+                            matInput
+                            [matDatepicker]="fromDatepicker"
+                            [formControlName]="'fromDate'">
+                        <mat-datepicker-toggle matSuffix [for]="fromDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #fromDatepicker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="fuse-mat-dense w-full h-fit" [subscriptSizing]="'dynamic'">
+                        <mat-label>Date de fin</mat-label>
+                        <input
+                            matInput
+                            [matDatepicker]="toDatepicker"
+                            [formControlName]="'toDate'">
+                        <mat-datepicker-toggle matSuffix [for]="toDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #toDatepicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <!-- Image file -->
+                <div class="flex flex-col">
+                    <div class="flex flex-col mb-1.5">
+                        <span class="font-medium leading-tight">Image</span>
+<!--                        <span class="text-sm text-secondary">Idéal : 500x500px (carré), format WEBP </span>-->
+                    </div>
+
+                    <div class="flex gap-2">
+                        @if (eventImgFile || eventForm.get('imagePath')?.value) {
+                            <div class="relative group h-24 md:h-30 w-24 md:w-30 rounded">
+                                <img
+                                    [src]="eventImgPreviewUrl || getFilePath(eventForm.get('imagePath')?.value)"
+                                    class="w-full h-full object-cover rounded border" [alt]="eventForm.get('alt')?.value"/>
+
+                                <!-- Boutons d'action au survol -->
+                                <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                    <button
+                                        mat-icon-button
+                                        type="button"
+                                        (click)="viewImage()"
+                                        class="mr-1 h-8 min-h-8 w-8 hover:bg-white hover:bg-opacity-20"
+                                        title="Visualiser l'image">
+                                        <mat-icon [color]="'primary'" [svgIcon]="'heroicons_solid:eye'" class="icon-size-5"></mat-icon>
+                                    </button>
+
+                                    <button
+                                        mat-icon-button
+                                        type="button"
+                                        (click)="removeImage()"
+                                        class="ml-1 h-8 min-h-8 w-8 hover:bg-white hover:bg-opacity-20"
+                                        title="Supprimer l'image">
+                                        <mat-icon [color]="'primary'" [svgIcon]="'heroicons_solid:trash'" class="icon-size-5"></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        <!-- Add/change image -->
+                        <div class="h-24 md:h-30 w-24 md:w-30">
+                            <input
+                                id="images-input"
+                                class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                type="file"
+                                accept="image/png, image/webp, image/jpeg, image/jpg"
+                                [multiple]="true"
+                                (change)="onImageChange($event)"
+                                #importImageInput>
+
+                            <label
+                                class="h-full w-full flex flex-col items-center justify-center rounded cursor-pointer border hover:bg-gray-400 hover:bg-opacity-20 dark:hover:bg-black dark:hover:bg-opacity-5 transition-opacity"
+                                for="images-input"
+                                matRipple>
+                                <mat-icon [color]="'primary'" [svgIcon]="eventImgFile || eventForm.get('imagePath')?.value ? 'heroicons_outline:pencil' : 'heroicons_outline:plus'" class="icon-size-7"></mat-icon>
+                                <span class="mt-1 text-primary text-center text-sm font-medium">
+                                    @if (eventImgFile || eventForm.get('imagePath')?.value) {
+                                        Modifier
+                                    } @else {
+                                        Ajouter
+                                    }
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action -->
+            <div class="flex items-center justify-center">
+                <button mat-flat-button
+                        [color]="'primary'"
+                        (click)="updateEvent()"
+                        [disabled]="eventForm.disabled || eventForm.invalid">
+                    @if (eventForm.enabled) {
+                        <span>Sauvegarder</span>
+                    } @else {
+                        <mat-progress-spinner
+                            [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
+                    }
+                </button>
+            </div>
+
+        </form>
+    }
+</div>

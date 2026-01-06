@@ -1,0 +1,56 @@
+<!-- Loading bar -->
+<fuse-loading-bar></fuse-loading-bar>
+
+<!-- Navigation -->
+<fuse-vertical-navigation
+    class="dark bg-gray-900 print:hidden"
+    [mode]="isScreenSmall ? 'over' : 'side'"
+    [name]="'mainNavigation'"
+    [navigation]="navigationItems"
+    [opened]="!isScreenSmall"
+>
+    <!-- Navigation header hook -->
+    <ng-container fuseVerticalNavigationContentHeader>
+        <!-- Logo -->
+        <div class="flex h-36 items-center justify-center">
+            <img
+                class="w-30 rounded"
+                src="assets/images/logo/nr.webp"
+                alt="App">
+        </div>
+    </ng-container>
+
+    <!-- Navigation footer hook -->
+    <ng-container fuseVerticalNavigationFooter>
+        <div class="relative flex items-center justify-center w-full py-3">
+            <span class="text-sm text-secondary">&copy; {{currentYear}} Simon Vennat</span>
+        </div>
+    </ng-container>
+</fuse-vertical-navigation>
+
+<!-- Wrapper -->
+<div class="flex w-full min-w-0 flex-auto flex-col">
+    <!-- Header -->
+    <div
+        class="bg-card relative z-49 flex h-16 w-full flex-0 justify-between items-center px-4 shadow dark:border-b dark:bg-transparent dark:shadow-none md:px-6 print:hidden"
+    >
+        <!-- Navigation toggle button -->
+        <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:bars-3'"></mat-icon>
+        </button>
+
+        <!-- Components -->
+        <div class="flex items-center space-x-0.5 sm:space-x-2">
+            <user></user>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-auto flex-col">
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+        @if (true) {
+            <router-outlet></router-outlet>
+        }
+    </div>
+</div>

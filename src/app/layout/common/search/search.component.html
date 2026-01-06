@@ -1,0 +1,68 @@
+<button
+    mat-icon-button
+    *ngIf="!opened"
+    (click)="open()">
+    <mat-icon [svgIcon]="'heroicons_outline:magnifying-glass'"></mat-icon>
+</button>
+<div
+    class="absolute inset-0 flex items-center shrink-0 z-99 bg-card"
+    *ngIf="opened"
+    @slideInTop
+    @slideOutTop>
+    <mat-icon
+        class="absolute ml-6 sm:ml-8"
+        [svgIcon]="'heroicons_outline:magnifying-glass'"></mat-icon>
+    <input
+        class="w-full h-full px-16 sm:px-18"
+        [formControl]="searchControl"
+        [matAutocomplete]="matAutocomplete"
+        [placeholder]="'Recherche'"
+        (keydown)="onKeydown($event)"
+        #barSearchInput>
+    <mat-autocomplete
+        class="max-h-128 sm:px-2 border-t rounded-b shadow-md"
+        [disableRipple]="true"
+        #matAutocomplete="matAutocomplete">
+        <mat-option
+            class="py-0 px-6 text-md pointer-events-none text-secondary bg-transparent"
+            *ngIf="resultSets && !resultSets.length">
+            Aucun résultat trouvé !
+        </mat-option>
+        <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
+            <mat-optgroup class="flex items-center mt-2 px-2">
+                <span class="text-sm font-semibold tracking-wider text-secondary">{{resultSet.label.toUpperCase()}}</span>
+            </mat-optgroup>
+            <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
+                <mat-option
+                    class="group relative mb-1 py-0 px-6 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover"
+                    [routerLink]="result.link">
+                    <!-- Pages -->
+                    <ng-container *ngIf="resultSet.id === 'pages'">
+                        <ng-container *ngTemplateOutlet="pageResult; context: {$implicit: result}"></ng-container>
+                    </ng-container>
+                </mat-option>
+            </ng-container>
+        </ng-container>
+    </mat-autocomplete>
+    <button
+        class="absolute top-1/2 right-5 sm:right-7 shrink-0 w-10 h-10 -mt-5"
+        mat-icon-button
+        (click)="close()">
+        <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+    </button>
+</div>
+
+
+<!-- Page result template -->
+<ng-template
+    #pageResult
+    let-result>
+    <div class="flex flex-col">
+        <div
+            class="truncate leading-normal"
+            [innerHTML]="result.title"></div>
+        <div class="truncate leading-normal text-sm text-secondary">
+            {{result.link}}
+        </div>
+    </div>
+</ng-template>
