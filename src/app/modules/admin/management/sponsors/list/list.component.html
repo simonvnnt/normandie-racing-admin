@@ -45,14 +45,6 @@
                                  (matSortChange)="sortChange()">
 
                                 <div class="flex flex-col">
-                                    <div [mat-sort-header]="'warnings'">
-                                        <mat-icon
-                                            [matTooltip]="'Avertissements'"
-                                            [svgIcon]="'heroicons_solid:exclamation-triangle'"></mat-icon>
-                                    </div>
-                                </div>
-
-                                <div class="flex flex-col">
                                     <div [mat-sort-header]="'displayWebsite'">
                                         <mat-icon
                                             [matTooltip]="'Visible sur le site'"
@@ -136,11 +128,6 @@
                             @if (sponsors.length > 0) {
                                 @for (sponsor of sponsors; track trackByFn(i, sponsor); let i = $index) {
                                     <div class="sponsor-grid grid items-center text-base gap-2 md:gap-4 py-1.5 px-6 border-b hover:bg-gray-100 dark:hover:bg-hover">
-                                        <!-- Warnings -->
-                                        <div>
-                                            {{ sponsor.contact?.warnings || 0 }}
-                                        </div>
-
                                         <!-- Display website -->
                                         <div>
                                             @if (sponsor.displayWebsite) {

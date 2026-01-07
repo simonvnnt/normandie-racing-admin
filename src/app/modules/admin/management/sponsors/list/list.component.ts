@@ -27,7 +27,7 @@ import {SponsorsService} from "../sponsors.service";
 import {FuseConfirmationService} from "@fuse/services/confirmation";
 import {Sponsor, SponsorFilters, Sponsorship} from "../sponsors.types";
 import {Pagination} from "../../../pagination.types";
-import {AsyncPipe, CurrencyPipe, NgTemplateOutlet} from "@angular/common";
+import {AsyncPipe, CurrencyPipe} from "@angular/common";
 import {MatDivider} from "@angular/material/divider";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {environment} from "environments/environment";
@@ -40,11 +40,11 @@ import {capitalizeFirstLetter} from "../../../../../core/utils/tool";
     styles: [
         `
             .sponsor-titles-grid {
-                grid-template-columns: 40px 40px 60px auto 140px 200px 130px 180px 60px;
+                grid-template-columns: 40px 60px auto 140px 200px 130px 180px 60px;
             }
 
             .sponsor-grid {
-                grid-template-columns: 40px 40px 60px auto 140px fit-content(100%) 60px;
+                grid-template-columns: 40px 60px auto 140px fit-content(100%) 60px;
             }
 
             .sponsorship-grid {
@@ -74,7 +74,6 @@ import {capitalizeFirstLetter} from "../../../../../core/utils/tool";
         MatDivider,
         MatPaginator,
         MatSort,
-        NgTemplateOutlet,
         MatSortHeader,
         MatTooltipModule,
         CurrencyPipe,
@@ -87,7 +86,6 @@ export class SponsorListComponent implements OnInit, OnDestroy, AfterViewInit {
     filtersForm: UntypedFormGroup;
     pagination: Pagination;
     sponsors$: Observable<Sponsor[]>;
-    selectedSponsor: Sponsor;
     drawerMode: 'side' | 'over';
     protected readonly environment = environment;
     protected readonly capitalizeFirstLetter = capitalizeFirstLetter;
