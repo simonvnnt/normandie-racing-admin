@@ -76,12 +76,7 @@ export class EventEditComponent implements OnInit {
             .subscribe(event => {
                 this.event = event;
 
-                this.eventForm.patchValue({
-                    name: event.name,
-                    fromDate: event.fromDate,
-                    toDate: event.toDate,
-                    imagePath: event.imagePath,
-                });
+                this.eventForm.patchValue(event);
 
                 this.changeDetectorRef.markForCheck();
             });

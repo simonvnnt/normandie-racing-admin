@@ -8,7 +8,7 @@
             </div>
 
             <!-- Close button -->
-            <a mat-icon-button [routerLink]="['../']">
+            <a mat-icon-button [routerLink]="['../../']">
                 <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
             </a>
         </div>
@@ -58,7 +58,7 @@
                             <div class="relative group h-24 md:h-30 w-24 md:w-30 rounded">
                                 <img
                                     [src]="eventImgPreviewUrl || getFilePath(eventForm.get('imagePath')?.value)"
-                                    class="w-full h-full object-cover rounded border" [alt]="eventForm.get('alt')?.value"/>
+                                    class="w-full h-full object-cover rounded border" alt=""/>
 
                                 <!-- Boutons d'action au survol -->
                                 <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity z-20">
@@ -90,8 +90,7 @@
                                 type="file"
                                 accept="image/png, image/webp, image/jpeg, image/jpg"
                                 [multiple]="true"
-                                (change)="onImageChange($event)"
-                                #importImageInput>
+                                (change)="onImageChange($event)">
 
                             <label
                                 class="h-full w-full flex flex-col items-center justify-center rounded cursor-pointer border hover:bg-gray-400 hover:bg-opacity-20 dark:hover:bg-black dark:hover:bg-opacity-5 transition-opacity"

@@ -86,7 +86,7 @@ export class EventsService {
 
                 return of(event);
             })
-        );;
+        );
     }
 
     createEvent(event: Event, eventImage?: File): Observable<Event>

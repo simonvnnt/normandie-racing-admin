@@ -1,0 +1,93 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Nouvelle personne</div>
+        <button
+            mat-icon-button
+            (click)="matDialogRef.close()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </button>
+    </div>
+
+    <div>
+        <form class="flex w-full flex-col p-3 sm:p-6 gap-6" [formGroup]="newPersonForm">
+            <div class="flex flex-col sm:flex-row gap-4">
+                <!-- First name -->
+                <mat-form-field class="w-full">
+                    <mat-label>Prénom</mat-label>
+                    <input matInput
+                           [formControlName]="'firstName'"/>
+                </mat-form-field>
+
+                <!-- Last name -->
+                <mat-form-field class="w-full">
+                    <mat-label>Nom</mat-label>
+                    <input matInput
+                           [formControlName]="'lastName'"/>
+                </mat-form-field>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <!-- Email -->
+                <mat-form-field class="w-full">
+                    <mat-label>Adresse mail</mat-label>
+                    <input matInput
+                           [formControlName]="'email'"/>
+                </mat-form-field>
+
+                <!-- Phone -->
+                <mat-form-field class="w-full">
+                    <mat-label>Numéro de téléphone</mat-label>
+                    <input matInput
+                           [formControlName]="'phone'"/>
+                </mat-form-field>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <!-- Warnings -->
+                <mat-form-field class="w-full sm:w-1/3 h-fit">
+                    <mat-label>Avertissements</mat-label>
+                    <input matInput
+                           type="number"
+                           [formControlName]="'warnings'"/>
+                    <button
+                        mat-icon-button
+                        (click)="incrementWarnings()"
+                        matSuffix>
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                    </button>
+                </mat-form-field>
+
+                <!-- Comment -->
+                <mat-form-field class="w-full sm:w-2/3">
+                    <mat-label>Commentaire</mat-label>
+                    <textarea matInput [formControlName]="'comment'"></textarea>
+                </mat-form-field>
+            </div>
+
+            <!-- Action -->
+            <div class="flex items-center">
+                <button mat-flat-button
+                        [color]="'primary'"
+                        (click)="createPerson()"
+                        [disabled]="newPersonForm.disabled || newPersonForm.invalid">
+                    @if (newPersonForm.enabled) {
+                        <span>Créer</span>
+                    } @else {
+                        <mat-progress-spinner
+                            [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
+                    }
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>

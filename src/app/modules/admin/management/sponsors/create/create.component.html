@@ -1,0 +1,423 @@
+<div class="flex flex-auto flex-col overflow-y-auto p-6">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <!-- Title -->
+        <div class="mt-3 truncate text-4xl font-bold">
+            Nouveau sponsor
+        </div>
+
+        <!-- Close button -->
+        <a mat-icon-button [routerLink]="['../../']">
+            <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </a>
+    </div>
+
+    <div>
+        <form class="flex w-full flex-col p-0 sm:p-6 gap-6" [formGroup]="newSponsorForm">
+
+            <div class="flex flex-col gap-8">
+                <!-- Sponsor -->
+                <div class="flex flex-col gap-4">
+                    <div class="text-xl font-semibold">Sponsor</div>
+
+                    <!-- Name and description -->
+                    <div class="flex gap-3">
+                        <!-- Name -->
+                        <mat-form-field class="w-1/3 h-fit fuse-mat-dense">
+                            <mat-label>Nom</mat-label>
+                            <input matInput
+                                   [formControlName]="'name'"/>
+                        </mat-form-field>
+
+                        <!-- Description -->
+                        <mat-form-field class="w-2/3 fuse-mat-dense">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput
+                                      [formControlName]="'description'"></textarea>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Image and alt text -->
+                    <div class="flex gap-3">
+                        <!-- Image file -->
+                        <div class="w-1/3 flex flex-col">
+                            <div class="flex flex-col mb-1.5">
+                                <span class="font-medium leading-tight">Image</span>
+                                <span class="text-sm text-secondary">Idéal : 500x500px (carré), format WEBP </span>
+                            </div>
+
+                            @if (sponsorImgFile) {
+                                <div class="relative group h-20 md:h-24 w-20 md:w-24 rounded">
+                                    <img
+                                        [src]="sponsorImgPreviewUrl"
+                                        class="w-full h-full object-cover rounded border" [alt]="newSponsorForm.get('alt')?.value"/>
+
+                                    <!-- Boutons d'action au survol -->
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                        <button
+                                            mat-icon-button
+                                            type="button"
+                                            (click)="viewImage()"
+                                            class="mr-1 h-8 min-h-8 w-8 hover:bg-white hover:bg-opacity-20"
+                                            title="Visualiser l'image">
+                                            <mat-icon [color]="'primary'" [svgIcon]="'heroicons_solid:eye'" class="icon-size-5"></mat-icon>
+                                        </button>
+
+                                        <button
+                                            mat-icon-button
+                                            type="button"
+                                            (click)="removeImage()"
+                                            class="ml-1 h-8 min-h-8 w-8 hover:bg-white hover:bg-opacity-20"
+                                            title="Supprimer l'image">
+                                            <mat-icon [color]="'primary'" [svgIcon]="'heroicons_solid:trash'" class="icon-size-5"></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            } @else {
+                                <!-- Add image -->
+                                <div class="h-20 md:h-24 w-20 md:w-24">
+                                    <input
+                                        id="images-input"
+                                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                        type="file"
+                                        accept="image/png, image/webp, image/jpeg, image/jpg"
+                                        [multiple]="true"
+                                        (change)="onImageChange(importImageInput.files)"
+                                        #importImageInput>
+
+                                    <label
+                                        class="h-full w-full flex flex-col items-center justify-center rounded cursor-pointer border hover:bg-gray-400 hover:bg-opacity-20 dark:hover:bg-black dark:hover:bg-opacity-5 transition-opacity"
+                                        for="images-input"
+                                        matRipple>
+                                        <mat-icon [color]="'primary'" [svgIcon]="'heroicons_outline:plus'" class="icon-size-7"></mat-icon>
+                                        <span class="mt-1 text-primary text-center text-sm font-medium">Ajouter</span>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Alt text -->
+                        <mat-form-field class="w-2/3 h-fit fuse-mat-dense">
+                            <mat-label>Texte alternatif</mat-label>
+                            <input matInput
+                                   [formControlName]="'alt'"/>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Display on website -->
+                    <div class="flex flex-col">
+                        <span class="mb-2 font-medium">Afficher sur le site*</span>
+
+                        <mat-slide-toggle
+                            [color]="'primary'"
+                            [formControlName]="'displayWebsite'">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+
+                <!-- Sponsor links -->
+                <div class="flex flex-col gap-4">
+                    <div class="text-xl font-semibold">Liens</div>
+
+                    <div>
+                        @for (link of (newSponsorForm.get('links') | formArray).controls; track trackByFn($index, link); let i = $index) {
+                            <div class="flex flex-col mb-4">
+                                <div class="w-full flex justify-between items-center">
+                                    <div class="w-full flex flex-col sm:flex-row gap-4 items-center">
+                                        <!-- Link Type -->
+                                        <mat-form-field class="w-full sm:w-1/3 fuse-mat-dense" [subscriptSizing]="'dynamic'">
+                                            <mat-select [formControl]="link.get('linkTypeId') | formControl" placeholder="Type de lien" #linkType>
+                                                @for (linkType of linkTypes$ | async; track trackByFn($index, linkType)) {
+                                                    <mat-option [value]="linkType.id">
+                                                        {{ linkType.name }}
+                                                    </mat-option>
+                                                }
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <!-- Value -->
+                                        <mat-form-field class="w-full sm:w-2/3 fuse-mat-dense fuse-mat-emphasized-affix" [subscriptSizing]="'dynamic'">
+                                            @if (linkType.value && linkType.value < 4) {
+                                                <div matPrefix class="text-secondary">
+                                                    @if (linkType.value === 1) {
+                                                        instagram.com/
+                                                    } @else if (linkType.value === 2) {
+                                                        facebook.com/
+                                                    } @else if (linkType.value === 3) {
+                                                        youtube.com/
+                                                    }
+                                                </div>
+                                            }
+
+                                            <input matInput
+                                                   placeholder="Lien"
+                                                   [formControl]="link.get('link') | formControl"
+                                                   #linkUrl>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <!-- Open link button -->
+                                    @if (linkType.value && linkUrl.value) {
+                                        <a
+                                            mat-icon-button
+                                            [href]="getLink(linkType.value, linkUrl.value)"
+                                            target="_blank"
+                                            matTooltip="Ouvrir le lien">
+                                            <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                                        </a>
+                                    }
+
+                                    <!-- Remove link button -->
+                                    <button
+                                        mat-icon-button
+                                        type="button"
+                                        (click)="removeLink(i)"
+                                        matTooltip="Supprimer le lien">
+                                        <mat-icon
+                                            class="icon-size-5"
+                                            [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+
+                        <button
+                            class="w-full rounded"
+                            mat-flat-button
+                            type="button"
+                            [color]="'accent'"
+                            (click)="addLink()"
+                            matTooltip="Ajouter un lien">
+                            <mat-icon
+                                class="icon-size-5"
+                                [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="flex flex-col gap-4">
+                    <div class="text-xl font-semibold">Contact</div>
+
+                    <div class="flex flex-col sm:flex-row items-center w-full gap-4">
+                        <mat-form-field class="w-full">
+                            <mat-label>Contact</mat-label>
+                            <input
+                                [formControlName]="'contactId'"
+                                [matAutocomplete]="matAutocompletes"
+                                [spellcheck]="false"
+                                matAutocompletePosition="below"
+                                matInput>
+
+                            <mat-autocomplete
+                                class="max-h-100 sm:px-1 border-t rounded-b shadow-md"
+                                [disableRipple]="true"
+                                [displayWith]="displayPersonFn.bind(this)"
+                                #matAutocompletes="matAutocomplete">
+                                @if (personResultSets && !personResultSets.length) {
+                                    <mat-option class="py-0 px-4 text-md pointer-events-none text-secondary bg-transparent">
+                                        Aucune personne trouvée !
+                                    </mat-option>
+                                } @else {
+                                    @for (person of personResultSets; track person.id) {
+                                        <mat-option
+                                            class="relative mb-1 py-0 px-4 text-md rounded-md hover:bg-gray-100 dark:hover:bg-hover leading-8 min-h-12 h-[unset]"
+                                            [value]="person.id">
+                                            {{capitalizeFirstLetter(person.firstName)}} {{person.lastName.toUpperCase()}} | {{person.email}}
+                                        </mat-option>
+                                    }
+                                }
+                            </mat-autocomplete>
+                        </mat-form-field>
+
+                        <div>
+                            <button
+                                mat-flat-button
+                                [color]="'accent'"
+                                (click)="openNewPersonDialog()">
+                                Nouvelle personne
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sponsorships -->
+                <div class="flex flex-col gap-4">
+                    <div class="text-xl font-semibold">Partenariats</div>
+
+                    <div>
+                        @for (sponsorship of (newSponsorForm.get('sponsorships') | formArray).controls; track trackByFn($index, sponsorship); let i = $index) {
+                            @if (sponsorship | formGroup; as sponsorship) {
+                                <div class="flex flex-col mb-4">
+                                    <div class="w-full flex justify-between items-center">
+                                        <div class="text-lg font-semibold">#{{ i+1 }}</div>
+
+                                        <button
+                                            mat-icon-button
+                                            type="button"
+                                            (click)="removeSponsorship(i)"
+                                            matTooltip="Supprimer le partenariat">
+                                            <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                                        <!-- Status -->
+                                        <mat-form-field class="w-full sm:w-2/5 fuse-mat-dense" [subscriptSizing]="'dynamic'">
+                                            <mat-select [formControl]="sponsorship.get('status') | formControl" placeholder="Statut">
+                                                <mat-option [value]="'À contacter'">À contacter</mat-option>
+                                                <mat-option [value]="'À relancer'">À relancer</mat-option>
+                                                <mat-option [value]="'En cours'">En cours</mat-option>
+                                                <mat-option [value]="'Refusé'">Refusé</mat-option>
+                                                <mat-option [value]="'Validé'">Validé</mat-option>
+                                                <mat-option [value]="'En attente du tiers'">En attente du tiers</mat-option>
+                                                <mat-option [value]="'Bloqué'">Bloqué</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+
+                                        <!-- Contract File -->
+                                        <div class="w-full sm:w-2/5 flex gap-2">
+                                            @if (contractFiles[i]) {
+                                                <div class="h-full w-fit flex flex-row rounded-md border px-2 py-1">
+                                                    <div class="flex items-center mr-2">
+                                                        <mat-icon class="icon-size-6" svgIcon="heroicons_outline:document-text"></mat-icon>
+                                                    </div>
+
+                                                    <div class="flex flex-col text-md">
+                                                        <span class="truncate max-w-30">{{ contractFiles[i].name }}</span>
+                                                        <span class="text-secondary text-sm">{{ (round(contractFiles[i].size / 1024, 2)) + ' Ko' }}</span>
+                                                    </div>
+
+                                                    <div class="flex items-center ml-2 cursor-pointer" (click)="removeContractFile(i)">
+                                                        <mat-icon class="icon-size-5 rounded-full hover:bg-gray-200 hover:dark:bg-gray-500 transition-all duration-300 ease-in-out" svgIcon="heroicons_outline:x-mark"></mat-icon>
+                                                    </div>
+                                                </div>
+                                            } @else {
+                                                <div class="w-fit">
+                                                    <input
+                                                        [id]="'contract-file-input' + i"
+                                                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                                        type="file"
+                                                        accept=".pdf,image/*"
+                                                        [multiple]="false"
+                                                        (change)="onContractFileChange(contractFileInput.files, i)"
+                                                        #contractFileInput>
+
+                                                    <label
+                                                        class="flex items-center rounded-md cursor-pointer h-10 px-3.5 py-2 border hover:bg-gray-400 hover:bg-opacity-20 dark:hover:bg-black dark:hover:bg-opacity-5"
+                                                        [for]="'contract-file-input' + i"
+                                                        matRipple>
+                                                        <mat-icon [color]="'primary'" [svgIcon]="'heroicons_outline:document-arrow-up'" class="icon-size-5"></mat-icon>
+                                                        <span class="ml-2 text-primary text-md font-medium whitespace-nowrap">Importer le contrat</span>
+                                                    </label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <!-- Counterparts -->
+                                    <div class="flex flex-col gap-2 mt-4">
+                                        <div class="font-semibold">Contreparties</div>
+
+                                        @for (counterpart of sponsorship.get('counterparts')['controls']; track trackByFn($index, counterpart); let j = $index) {
+                                            <div class="flex gap-4 items-center">
+                                                <!-- Counterpart type -->
+                                                <mat-form-field class="w-full fuse-mat-dense" [subscriptSizing]="'dynamic'">
+                                                    <mat-select
+                                                        placeholder="Type"
+                                                        [formControl]="counterpart.get('counterpartType')"
+                                                        #counterpartTypeSelector>
+                                                        <mat-option [value]="'amount'">Montant</mat-option>
+                                                        <mat-option [value]="'other'">Autre</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+
+                                                @if (counterpartTypeSelector.value === 'amount') {
+                                                    <!-- Amount -->
+                                                    <mat-form-field class="w-full fuse-mat-dense" [subscriptSizing]="'dynamic'">
+                                                        <input matInput
+                                                               type="number"
+                                                               placeholder="Montant"
+                                                               [formControl]="counterpart.get('amount')"/>
+                                                        <span matSuffix>€</span>
+                                                    </mat-form-field>
+                                                } @else if (counterpartTypeSelector.value === 'other') {
+                                                    <!-- Other counterpart -->
+                                                    <mat-form-field class="w-full fuse-mat-dense" [subscriptSizing]="'dynamic'">
+                                                        <input matInput
+                                                               placeholder="Contrepartie"
+                                                               [formControl]="counterpart.get('otherCounterpart')"/>
+                                                    </mat-form-field>
+                                                }
+
+                                                <!-- Remove button -->
+                                                <button
+                                                    mat-icon-button
+                                                    type="button"
+                                                    (click)="removeCounterpart((sponsorship), j)"
+                                                    matTooltip="Supprimer la contrepartie">
+                                                    <mat-icon
+                                                        class="icon-size-5"
+                                                        [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                                </button>
+                                            </div>
+                                        }
+
+                                        <div class="flex">
+                                            <button
+                                                class="rounded"
+                                                mat-stroked-button
+                                                type="button"
+                                                [color]="'primary'"
+                                                (click)="addCounterpart(sponsorship)"
+                                                matTooltip="Ajouter une contrepartie">
+                                                <mat-icon
+                                                    class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                        <button
+                            class="w-full rounded"
+                            mat-flat-button
+                            type="button"
+                            [color]="'accent'"
+                            (click)="addSponsorship()"
+                            matTooltip="Ajouter un partenariat">
+                            <mat-icon
+                                class="icon-size-5"
+                                [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action -->
+            <div class="flex items-center">
+                <button mat-flat-button
+                        [color]="'primary'"
+                        (click)="createSponsor()"
+                        [disabled]="newSponsorForm.disabled || newSponsorForm.invalid">
+                    @if (newSponsorForm.enabled) {
+                        <span>Créer</span>
+                    } @else {
+                        <mat-progress-spinner
+                            [diameter]="24"
+                            [mode]="'indeterminate'"></mat-progress-spinner>
+                    }
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>

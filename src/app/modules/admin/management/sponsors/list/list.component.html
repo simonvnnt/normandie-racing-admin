@@ -1,0 +1,257 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 bg-card dark:bg-transparent">
+    <mat-drawer-container class="bg-card h-full flex-auto dark:bg-transparent" (backdropClick)="onBackdropClick()">
+        <!-- Drawer -->
+        <mat-drawer
+            class="w-full dark:bg-gray-900 sm:w-128 md:w-160 xl:w-180"
+            [mode]="drawerMode"
+            [opened]="false"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+            <!-- Header -->
+            <div class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+                <div class="w-full flex flex-col sm:flex-row gap-2 sm:justify-between sm:items-center">
+                    <!-- Title -->
+                    <div class="text-4xl font-extrabold tracking-tight">Sponsors</div>
+
+                    <div class="flex gap-2">
+
+                        <!-- Add Sponsor -->
+                        <button
+                            mat-flat-button
+                            [color]="'primary'"
+                            [routerLink]="['./create']">
+                            <span class="mx-2">Nouveau sponsor</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main -->
+            <div class="flex flex-auto overflow-hidden">
+                <!-- Sponsor list -->
+                <div class="flex flex-col flex-auto overflow-hidden sm:mb-18 sm:overflow-auto">
+                    @if ((sponsors$ | async); as sponsors) {
+                        <div class="grid overflow-y-auto">
+                            <!-- Header -->
+                            <div class="sponsor-titles-grid z-10 sticky top-0 grid gap-2 md:gap-4 py-4 px-6 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-gray-900 items-end"
+                                 [formGroup]="filtersForm"
+                                 matSort
+                                 matSortDisableClear
+                                 (matSortChange)="sortChange()">
+
+                                <div class="flex flex-col">
+                                    <div [mat-sort-header]="'warnings'">
+                                        <mat-icon
+                                            [matTooltip]="'Avertissements'"
+                                            [svgIcon]="'heroicons_solid:exclamation-triangle'"></mat-icon>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <div [mat-sort-header]="'displayWebsite'">
+                                        <mat-icon
+                                            [matTooltip]="'Visible sur le site'"
+                                            [svgIcon]="'heroicons_solid:computer-desktop'"></mat-icon>
+                                    </div>
+                                </div>
+
+                                <div></div>
+
+                                <div class="flex flex-col">
+                                    <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                        <input matInput
+                                               placeholder="Nom"
+                                               [formControlName]="'name'"/>
+                                    </mat-form-field>
+
+                                    <div [mat-sort-header]="'name'">Nom</div>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                        <input matInput
+                                               placeholder="Contact"
+                                               [formControlName]="'contact'"/>
+                                    </mat-form-field>
+
+                                    <div [mat-sort-header]="'contact'">Contact</div>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                        <mat-select [formControlName]="'status'" [placeholder]="'Statut'">
+                                            <mat-option [value]="''">Tous</mat-option>
+                                            <mat-option [value]="'À contacter'">À contacter</mat-option>
+                                            <mat-option [value]="'À relancer'">À relancer</mat-option>
+                                            <mat-option [value]="'En cours'">En cours</mat-option>
+                                            <mat-option [value]="'Refusé'">Refusé</mat-option>
+                                            <mat-option [value]="'Validé'">Validé</mat-option>
+                                            <mat-option [value]="'En attente du tiers'">En attente du tiers</mat-option>
+                                            <mat-option [value]="'Bloqué'">Bloqué</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                    <div [mat-sort-header]="'status'">Statut</div>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <div class="flex flex-col">
+                                        <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                            <input matInput
+                                                   type="number"
+                                                   placeholder="Min. montant"
+                                                   [formControlName]="'minAmount'"/>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                            <input matInput
+                                                   type="number"
+                                                   placeholder="Max. montant"
+                                                   [formControlName]="'maxAmount'"/>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div [mat-sort-header]="'amount'">Montant total</div>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                        <input matInput
+                                               placeholder="Contreparties"
+                                               [formControlName]="'otherCounterpart'"/>
+                                    </mat-form-field>
+
+                                    <div [mat-sort-header]="'otherCounterpart'">Autres contreparties</div>
+                                </div>
+
+                                <div></div>
+                            </div>
+
+                            <!-- Rows -->
+                            @if (sponsors.length > 0) {
+                                @for (sponsor of sponsors; track trackByFn(i, sponsor); let i = $index) {
+                                    <div class="sponsor-grid grid items-center text-base gap-2 md:gap-4 py-1.5 px-6 border-b hover:bg-gray-100 dark:hover:bg-hover">
+                                        <!-- Warnings -->
+                                        <div>
+                                            {{ sponsor.contact?.warnings || 0 }}
+                                        </div>
+
+                                        <!-- Display website -->
+                                        <div>
+                                            @if (sponsor.displayWebsite) {
+                                                <mat-icon
+                                                    class=" text-green-400 icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                                            } @else {
+                                                <mat-icon
+                                                    class="text-gray-400 icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
+                                            }
+                                        </div>
+
+                                        <!-- Image -->
+                                        <div class="relative flex w-10 h-10 flex-0 items-center justify-center overflow-hidden rounded border">
+                                            <div>
+                                                @if (getFilePath(sponsor.filePath); as src) {
+                                                    <img class="w-full"
+                                                         alt=""
+                                                         [src]="src" />
+                                                }
+                                                @else {
+                                                    <div class="flex h-full w-full items-center justify-center text-center text-xs font-semibold uppercase leading-none">
+                                                        NO THUMB
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- Name -->
+                                        <a [routerLink]="[sponsor.id, 'edit']" class="w-fit hover:underline" [matTooltip]="sponsor.name">
+                                            {{ sponsor.name }}
+                                        </a>
+
+                                        <!-- Contact -->
+                                        <div class="max-w-32 truncate">
+                                            @if (sponsor.contact?.firstName || sponsor.contact?.lastName) {
+                                                <span [matTooltip]="capitalizeFirstLetter(sponsor.contact?.firstName) + ' ' + sponsor.contact?.lastName.toUpperCase()">{{ capitalizeFirstLetter(sponsor.contact?.firstName) }} {{ sponsor.contact?.lastName.toUpperCase() }}</span>
+                                            } @else {
+                                                -
+                                            }
+                                        </div>
+
+                                        <!-- Sponsorships -->
+                                        <div class="flex flex-col">
+                                            @if (sponsor.sponsorships && sponsor.sponsorships.length > 0) {
+                                                @for (sponsorship of sponsor.sponsorships; track trackByFn($index, sponsorship); let last = $last) {
+                                                    <div class="flex flex-col">
+                                                        <div class="grid sponsorship-grid gap-4 items-center">
+                                                            <!-- Status -->
+                                                            <div>
+                                                                {{ sponsorship.status }}
+                                                            </div>
+
+                                                            <!-- Total amount counterparts -->
+                                                            <div>
+                                                                {{ getSponsorshipTotalAmount(sponsorship) | currency:'EUR' }}
+                                                            </div>
+
+                                                            <!-- Other counterparts -->
+                                                            <div>
+                                                                @if (getSponsorshipOtherCounterparts(sponsorship).join(', '); as otherCounterparts) {
+                                                                    {{ otherCounterparts }}
+                                                                } @else {
+                                                                    -
+                                                                }
+                                                            </div>
+                                                        </div>
+
+                                                        @if (!last) {
+                                                            <mat-divider class="my-2"></mat-divider>
+                                                        }
+                                                    </div>
+                                                }
+                                            } @else {
+                                                <div class="grid no-sponsorship-grid text-center">
+                                                    <span class="text-sm text-secondary">Aucune participation</span>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <!-- Delete button -->
+                                        <div>
+                                            <button
+                                                mat-stroked-button
+                                                class="h-10 min-h-10 min-w-10 px-2 leading-6 rounded-md group"
+                                                title="Supprimer le sponsor"
+                                                (click)="$event.stopPropagation(); deleteSponsor(sponsor.id)">
+                                                <mat-icon
+                                                    class="icon-size-5 group-hover:text-red-500"
+                                                    [svgIcon]="'heroicons_solid:trash'"
+                                                ></mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            } @else {
+                                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Aucun sponsor trouvé !</div>
+                            }
+                        </div>
+                    }
+
+                    <mat-paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [pageSizeOptions]="[50, 100, 200, 1000]"
+                        [pageIndex]="pagination?.pageIndex-1"
+                        [length]="pagination?.totalItems"
+                        [pageSize]="pagination?.itemsPerPage"
+                        [showFirstLastButtons]="true"></mat-paginator>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

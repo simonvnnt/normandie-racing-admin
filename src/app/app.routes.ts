@@ -46,6 +46,11 @@ export const appRoutes: Route[] = [
                         path: 'events',
                         loadChildren: () => import('app/modules/admin/management/events/events.routes'),
                     },
+                    {
+                        // Sponsors
+                        path: 'sponsors',
+                        loadChildren: () => import('app/modules/admin/management/sponsors/sponsors.routes'),
+                    }
                 ]
             },
         ]

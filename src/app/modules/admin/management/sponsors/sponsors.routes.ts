@@ -1,20 +1,20 @@
 import {ActivatedRouteSnapshot, Router, RouterStateSnapshot, Routes} from '@angular/router';
-import {EventsListComponent} from "./list/list.component";
-import {EventCreateComponent} from "./create/create.component";
+import {SponsorCreateComponent} from "./create/create.component";
 import {inject} from "@angular/core";
-import {EventsService} from "./events.service";
-import {EventEditComponent} from "./edit/edit.component";
 import {catchError, throwError} from "rxjs";
+import {SponsorsService} from "./sponsors.service";
+import {SponsorListComponent} from "./list/list.component";
+import {SponsorEditComponent} from "./edit/edit.component";
 
 /**
- * Can deactivate event
+ * Can deactivate sponsor
  *
  * @param component
  * @param currentRoute
  * @param currentState
  * @param nextState
  */
-const canDeactivateEvent = (
+const canDeactivateSponsor = (
     component: any,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
@@ -26,9 +26,9 @@ const canDeactivateEvent = (
         nextRoute = nextRoute.firstChild;
     }
 
-    // If the next state doesn't contain '/events'
-    // it means we are navigating away from the events app
-    if (!nextState.url.includes('/events')) {
+    // If the next state doesn't contain '/sponsors'
+    // it means we are navigating away from the sponsors app
+    if (!nextState.url.includes('/sponsors')) {
         // Let it navigate
         return true;
     }
@@ -38,35 +38,35 @@ const canDeactivateEvent = (
 };
 
 /**
- * Events resolver
+ * Sponsors resolver
  *
  * @param route
  * @param state
  */
-const eventsResolver = (
+const sponsorsResolver = (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
 ) => {
-    const eventsService = inject(EventsService);
+    const sponsorService = inject(SponsorsService);
 
-    return eventsService.getEvents(1, 50);
+    return sponsorService.getSponsors(1, 50);
 };
 
 /**
- * Event resolver
+ * Sponsor resolver
  *
  * @param route
  * @param state
  */
-const eventResolver = (
+const sponsorResolver = (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
 ) => {
-    const eventsService = inject(EventsService);
+    const sponsorsService = inject(SponsorsService);
     const router = inject(Router);
 
-    return eventsService.getEventById(+route.paramMap.get('id')).pipe(
-        // Error here means the requested event is not available
+    return sponsorsService.getSponsorById(+route.paramMap.get('id')).pipe(
+        // Error here means the requested sponsor is not available
         catchError((error) => {
             // Log the error
             console.error(error);
@@ -87,23 +87,24 @@ const eventResolver = (
 export default [
     {
         path     : '',
-        component: EventsListComponent,
+        component: SponsorListComponent,
         resolve  : {
-            events: eventsResolver
+            linkTypes: () => inject(SponsorsService).getLinkTypes(),
+            sponsors: sponsorsResolver
         },
         children: [
             {
                 path     : 'create',
-                component: EventCreateComponent,
-                canDeactivate: [canDeactivateEvent]
+                component: SponsorCreateComponent,
+                canDeactivate: [canDeactivateSponsor]
             },
             {
                 path     : ':id/edit',
-                component: EventEditComponent,
+                component: SponsorEditComponent,
                 resolve  : {
-                    event: eventResolver
+                    sponsor: sponsorResolver
                 },
-                canDeactivate: [canDeactivateEvent]
+                canDeactivate: [canDeactivateSponsor]
             }
         ]
     }

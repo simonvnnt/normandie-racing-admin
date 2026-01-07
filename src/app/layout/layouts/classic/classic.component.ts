@@ -98,6 +98,13 @@ export class ClassicLayoutComponent implements OnInit, OnDestroy {
                         type: 'basic',
                         icon: 'heroicons_outline:calendar-days',
                         link: '/management/events'
+                    },
+                    {
+                        id: 'management.sponsors',
+                        title: 'Sponsors',
+                        type: 'basic',
+                        icon: 'heroicons_outline:gift',
+                        link: '/management/sponsors'
                     }
                 ]
             }

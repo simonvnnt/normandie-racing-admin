@@ -74,20 +74,20 @@
                                 @for (event of events; track trackByFn(i, event); let i = $index) {
                                     <div class="events-grid grid items-center text-base gap-4 md:gap-6 py-3 px-6 border-b hover:bg-gray-100 dark:hover:bg-hover">
                                         <!-- Image -->
-                                            <div class="relative flex h-10 md:h-16 w-10 md:w-16 flex-0 items-center justify-center overflow-hidden rounded border">
-                                                <div>
-                                                    @if (getFilePath(event.imagePath); as src) {
-                                                        <img class="w-full"
-                                                             alt=""
-                                                             [src]="src" />
-                                                    }
-                                                    @else {
-                                                        <div class="flex h-full w-full items-center justify-center text-center text-xs font-semibold uppercase leading-none">
-                                                            NO THUMB
-                                                        </div>
-                                                    }
-                                                </div>
+                                        <div class="relative flex h-10 md:h-16 w-10 md:w-16 flex-0 items-center justify-center overflow-hidden rounded border">
+                                            <div>
+                                                @if (getFilePath(event.imagePath); as src) {
+                                                    <img class="w-full"
+                                                         alt=""
+                                                         [src]="src" />
+                                                }
+                                                @else {
+                                                    <div class="flex h-full w-full items-center justify-center text-center text-xs font-semibold uppercase leading-none">
+                                                        NO THUMB
+                                                    </div>
+                                                }
                                             </div>
+                                        </div>
 
                                         <!-- Name -->
                                         <a [routerLink]="[event.id, 'edit']" class="w-fit hover:underline">
