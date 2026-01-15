@@ -14,7 +14,7 @@
         </div>
 
         <!-- Content -->
-        <form class="flex w-full flex-col p-0 sm:p-6 gap-6" [formGroup]="sponsorForm">
+        <form class="flex w-full flex-col p-0 sm:p-4 gap-6" [formGroup]="sponsorForm">
 
             <div class="flex flex-col gap-8">
                 <!-- Sponsor -->
@@ -164,17 +164,16 @@
                                     </div>
 
                                     <!-- Open link button -->
-                                    @if (linkType.value && linkUrl.value) {
-                                        <a
-                                            mat-icon-button
-                                            [href]="getLink(linkType.value, linkUrl.value)"
-                                            target="_blank"
-                                            matTooltip="Ouvrir le lien">
-                                            <mat-icon
-                                                class="icon-size-5"
-                                                [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
-                                        </a>
-                                    }
+                                    <a
+                                        mat-icon-button
+                                        [href]="getLink(linkType.value, linkUrl.value)"
+                                        [disabled]="!linkType.value || !linkUrl.value"
+                                        target="_blank"
+                                        matTooltip="Ouvrir le lien">
+                                        <mat-icon
+                                            class="icon-size-5"
+                                            [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                                    </a>
 
                                     <!-- Remove link button -->
                                     <button

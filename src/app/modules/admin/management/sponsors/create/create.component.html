@@ -8,7 +8,7 @@
         </div>
 
         <!-- Close button -->
-        <a mat-icon-button [routerLink]="['../../']">
+        <a mat-icon-button [routerLink]="['../']">
             <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
         </a>
     </div>
@@ -158,17 +158,16 @@
                                     </div>
 
                                     <!-- Open link button -->
-                                    @if (linkType.value && linkUrl.value) {
-                                        <a
-                                            mat-icon-button
-                                            [href]="getLink(linkType.value, linkUrl.value)"
-                                            target="_blank"
-                                            matTooltip="Ouvrir le lien">
-                                            <mat-icon
-                                                class="icon-size-5"
-                                                [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
-                                        </a>
-                                    }
+                                    <a
+                                        mat-icon-button
+                                        [href]="getLink(linkType.value, linkUrl.value)"
+                                        [disabled]="!linkType.value || !linkUrl.value"
+                                        target="_blank"
+                                        matTooltip="Ouvrir le lien">
+                                        <mat-icon
+                                            class="icon-size-5"
+                                            [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                                    </a>
 
                                     <!-- Remove link button -->
                                     <button

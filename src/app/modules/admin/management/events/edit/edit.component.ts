@@ -12,7 +12,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatDrawerToggleResult, MatSidenavModule} from "@angular/material/sidenav";
 import {EventsService} from "../events.service";
 import {EventsListComponent} from "../list/list.component";
-import {Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MatButtonModule, MatIconAnchor} from "@angular/material/button";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -55,6 +55,7 @@ export class EventEditComponent implements OnInit {
         private fuseConfirmationService: FuseConfirmationService,
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private eventsListComponent: EventsListComponent
     ) {
     }
@@ -88,7 +89,7 @@ export class EventEditComponent implements OnInit {
 
         this.eventsService.updateEvent(this.event.id, this.eventForm.getRawValue(), this.eventImgFile).subscribe({
             next: () => {
-                this.router.navigate(['../']);
+                this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
                 this.changeDetectorRef.markForCheck();
             },
             error: (err) => {

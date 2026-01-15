@@ -128,7 +128,7 @@ export class EventsService {
                     // Find the index of the updated event
                     const index = events.findIndex(item => item.id === eventId);
 
-                    if (index === -1) {
+                    if (index !== -1) {
                         // Update the event
                         events[index] = updatedEvent;
 

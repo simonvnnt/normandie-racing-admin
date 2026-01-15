@@ -67,6 +67,16 @@
                                 <div class="flex flex-col">
                                     <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
                                         <input matInput
+                                               placeholder="Description"
+                                               [formControlName]="'description'"/>
+                                    </mat-form-field>
+
+                                    <div [mat-sort-header]="'description'">Description</div>
+                                </div>
+
+                                <div class="flex flex-col">
+                                    <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
+                                        <input matInput
                                                placeholder="Contact"
                                                [formControlName]="'contact'"/>
                                     </mat-form-field>
@@ -89,36 +99,6 @@
                                     </mat-form-field>
 
                                     <div [mat-sort-header]="'status'">Statut</div>
-                                </div>
-
-                                <div class="flex flex-col">
-                                    <div class="flex flex-col">
-                                        <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
-                                            <input matInput
-                                                   type="number"
-                                                   placeholder="Min. montant"
-                                                   [formControlName]="'minAmount'"/>
-                                        </mat-form-field>
-
-                                        <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
-                                            <input matInput
-                                                   type="number"
-                                                   placeholder="Max. montant"
-                                                   [formControlName]="'maxAmount'"/>
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div [mat-sort-header]="'amount'">Montant total</div>
-                                </div>
-
-                                <div class="flex flex-col">
-                                    <mat-form-field class="w-full fuse-mat-dense mb-2" [subscriptSizing]="'dynamic'">
-                                        <input matInput
-                                               placeholder="Contreparties"
-                                               [formControlName]="'otherCounterpart'"/>
-                                    </mat-form-field>
-
-                                    <div [mat-sort-header]="'otherCounterpart'">Autres contreparties</div>
                                 </div>
 
                                 <div></div>
@@ -162,6 +142,11 @@
                                             {{ sponsor.name }}
                                         </a>
 
+                                        <!-- Description -->
+                                        <div class="truncate" [matTooltip]="sponsor.description">
+                                            {{ sponsor.description || '-' }}
+                                        </div>
+
                                         <!-- Contact -->
                                         <div class="max-w-32 truncate">
                                             @if (sponsor.contact?.firstName || sponsor.contact?.lastName) {
@@ -181,20 +166,6 @@
                                                             <div>
                                                                 {{ sponsorship.status }}
                                                             </div>
-
-                                                            <!-- Total amount counterparts -->
-                                                            <div>
-                                                                {{ getSponsorshipTotalAmount(sponsorship) | currency:'EUR' }}
-                                                            </div>
-
-                                                            <!-- Other counterparts -->
-                                                            <div>
-                                                                @if (getSponsorshipOtherCounterparts(sponsorship).join(', '); as otherCounterparts) {
-                                                                    {{ otherCounterparts }}
-                                                                } @else {
-                                                                    -
-                                                                }
-                                                            </div>
                                                         </div>
 
                                                         @if (!last) {
@@ -203,7 +174,7 @@
                                                     </div>
                                                 }
                                             } @else {
-                                                <div class="grid no-sponsorship-grid text-center">
+                                                <div class="grid sponsorship-grid text-center">
                                                     <span class="text-sm text-secondary">Aucune participation</span>
                                                 </div>
                                             }

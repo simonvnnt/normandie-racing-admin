@@ -2,7 +2,6 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {AuthService} from 'app/core/auth/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Title} from '@angular/platform-browser';
 import {FuseAlertComponent, FuseAlertType} from '@fuse/components/alert';
 import {fuseAnimations} from '@fuse/animations';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
@@ -39,11 +38,7 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private title: Title
-    ) {
-        this.title.setTitle('Connexion • Normandie Racing Admin');
-    }
+    ) {}
 
     ngOnInit(): void {
         this.loginForm = this.formBuilder.group({
@@ -67,7 +62,7 @@ export class LoginComponent implements OnInit {
 
         this.auth.login(this.loginForm.getRawValue()).subscribe({
             next: () => {
-                const redirectURL = this.activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/summary';
+                const redirectURL = this.activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/management';
 
                 this.router.navigateByUrl(redirectURL);
             },

@@ -23,6 +23,7 @@ export const appRoutes: Route[] = [
         children: [
             {
                 path: 'login',
+                title: 'Connexion • Normandie Racing Admin',
                 loadChildren: () => import('app/modules/auth/login/login.routes')
             },
         ]
@@ -44,11 +45,13 @@ export const appRoutes: Route[] = [
                     {
                         // Events
                         path: 'events',
+                        title: 'Événements • Normandie Racing Admin',
                         loadChildren: () => import('app/modules/admin/management/events/events.routes'),
                     },
                     {
                         // Sponsors
                         path: 'sponsors',
+                        title: 'Sponsors • Normandie Racing Admin',
                         loadChildren: () => import('app/modules/admin/management/sponsors/sponsors.routes'),
                     }
                 ]

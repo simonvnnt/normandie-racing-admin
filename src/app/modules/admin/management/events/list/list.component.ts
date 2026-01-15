@@ -1,5 +1,4 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Title} from '@angular/platform-browser';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {
@@ -82,11 +81,8 @@ export class EventsListComponent implements OnInit, OnDestroy, AfterViewInit {
         private fuseConfirmationService: FuseConfirmationService,
         private changeDetectorRef: ChangeDetectorRef,
         private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private title: Title
-    ) {
-        this.title.setTitle('Événements • Normandie Racing Admin');
-    }
+        private router: Router
+    ) {}
 
     ngOnInit(): void
     {

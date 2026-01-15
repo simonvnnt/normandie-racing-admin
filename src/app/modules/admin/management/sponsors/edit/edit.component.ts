@@ -13,7 +13,7 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {MatDrawerToggleResult, MatSidenavModule} from "@angular/material/sidenav";
 import {SponsorsService} from "../sponsors.service";
 import {SponsorListComponent} from "../list/list.component";
-import {Router, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MatButtonModule, MatIconAnchor} from "@angular/material/button";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -76,6 +76,7 @@ export class SponsorEditComponent implements OnInit {
         private fuseConfirmationService: FuseConfirmationService,
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
+        private activatedRoute: ActivatedRoute,
         private sponsorListComponent: SponsorListComponent
     ) {
     }
@@ -213,8 +214,8 @@ export class SponsorEditComponent implements OnInit {
         // Update the sponsor
         this.sponsorsService.updateSponsor(this.sponsor.id, sponsor, this.sponsorImgFile, this.contractFiles).subscribe({
             next: () => {
-                this.router.navigate(['../']);
                 this.changeDetectorRef.markForCheck();
+                this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
             },
             error: (err) => {
                 this.sponsorForm.enable();

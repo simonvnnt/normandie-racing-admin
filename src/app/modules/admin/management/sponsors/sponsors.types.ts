@@ -31,6 +31,7 @@ export interface SponsorshipCounterpart {
 
 export interface SponsorFilters {
     name: string;
+    description: string;
     contact: string;
     status: string;
     counterpartType: string;

@@ -1,5 +1,4 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Title} from '@angular/platform-browser';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {
@@ -27,7 +26,7 @@ import {SponsorsService} from "../sponsors.service";
 import {FuseConfirmationService} from "@fuse/services/confirmation";
 import {Sponsor, SponsorFilters, Sponsorship} from "../sponsors.types";
 import {Pagination} from "../../../pagination.types";
-import {AsyncPipe, CurrencyPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {MatDivider} from "@angular/material/divider";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {environment} from "environments/environment";
@@ -40,15 +39,15 @@ import {capitalizeFirstLetter} from "../../../../../core/utils/tool";
     styles: [
         `
             .sponsor-titles-grid {
-                grid-template-columns: 40px 60px auto 140px 200px 130px 180px 60px;
+                grid-template-columns: 40px 60px auto 200px 140px 200px 60px;
             }
 
             .sponsor-grid {
-                grid-template-columns: 40px 60px auto 140px fit-content(100%) 60px;
+                grid-template-columns: 40px 60px auto 200px 140px fit-content(100%) 60px;
             }
 
             .sponsorship-grid {
-                grid-template-columns: 200px 130px 180px;
+                grid-template-columns: 200px;
             }
 
             .no-sponsorship-grid {
@@ -75,8 +74,7 @@ import {capitalizeFirstLetter} from "../../../../../core/utils/tool";
         MatPaginator,
         MatSort,
         MatSortHeader,
-        MatTooltipModule,
-        CurrencyPipe,
+        MatTooltipModule
     ]
 })
 export class SponsorListComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -99,16 +97,14 @@ export class SponsorListComponent implements OnInit, OnDestroy, AfterViewInit {
         private changeDetectorRef: ChangeDetectorRef,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private storageService: StorageService,
-        private title: Title
-    ) {
-        this.title.setTitle('Sponsors • Normandie Racing Admin');
-    }
+        private storageService: StorageService
+    ) {}
 
     ngOnInit(): void
     {
         this.filtersForm = this.formBuilder.group({
             name: [null],
+            description: [null],
             contact: [null],
             status: [''],
             minAmount: [null],

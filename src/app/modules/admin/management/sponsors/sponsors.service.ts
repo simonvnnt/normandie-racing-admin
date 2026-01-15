@@ -60,6 +60,7 @@ export class SponsorsService {
         if (sort) params = params.set('sort', sort);
         if (order) params = params.set('order', order);
         if (sponsorFilters?.name) params = params.set('name', sponsorFilters?.name);
+        if (sponsorFilters?.description) params = params.set('description', sponsorFilters?.description);
         if (sponsorFilters?.contact) params = params.set('contact', sponsorFilters?.contact);
         if (sponsorFilters?.status) params = params.set('status', sponsorFilters?.status);
         if (sponsorFilters?.counterpartType) params = params.set('counterpartType', sponsorFilters?.counterpartType);
@@ -149,7 +150,7 @@ export class SponsorsService {
                     // Find the index of the updated sponsor
                     const index = sponsors.findIndex(item => item.id === sponsorId);
 
-                    if (index === -1) {
+                    if (index !== -1) {
                         // Update the sponsor
                         sponsors[index] = updatedSponsor;
 
