@@ -25,6 +25,27 @@
                     </mat-form-field>
                 </div>
 
+                <div class="flex flex-row items-baseline gap-2">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Lien</mat-label>
+                        <input matInput
+                                  [formControlName]="'link'"
+                                  #linkUrl />
+                    </mat-form-field>
+
+                    <!-- Open link button -->
+                    <a
+                        mat-icon-button
+                        [href]="linkUrl.value"
+                        target="_blank"
+                        [disabled]="!linkUrl.value"
+                        matTooltip="Ouvrir le lien">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                    </a>
+                </div>
+
                 <div class="flex flex-row items-center gap-4">
                     <mat-form-field class="fuse-mat-dense w-full h-fit" [subscriptSizing]="'dynamic'">
                         <mat-label>Date de début</mat-label>

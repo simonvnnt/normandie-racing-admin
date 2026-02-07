@@ -21,6 +21,7 @@ import {Subject, takeUntil} from "rxjs";
 import {Event} from "../events.types";
 import {environment} from "../../../../../../environments/environment";
 import {FuseConfirmationService} from "../../../../../../@fuse/services/confirmation";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
     selector: 'event-update',
@@ -39,7 +40,8 @@ import {FuseConfirmationService} from "../../../../../../@fuse/services/confirma
         MatButtonModule,
         MatProgressSpinner,
         MatAutocompleteModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatTooltip
     ]
 })
 export class EventEditComponent implements OnInit {
@@ -67,6 +69,7 @@ export class EventEditComponent implements OnInit {
 
         this.eventForm = this.formBuilder.group({
             name: ['', Validators.required],
+            link: [''],
             fromDate: [null, Validators.required],
             toDate: [null, Validators.required],
             imagePath: [''],

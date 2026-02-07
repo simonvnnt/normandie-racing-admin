@@ -8,7 +8,7 @@ import {
 } from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {
     debounceTime,
     map,
@@ -37,7 +37,7 @@ import {environment} from "../../../../../../environments/environment";
     styles: [
         `
             .events-grid {
-                grid-template-columns: 64px auto 150px 150px 60px;
+                grid-template-columns: 64px auto 60px 150px 150px 60px;
             }
         `,
     ],
@@ -61,6 +61,7 @@ import {environment} from "../../../../../../environments/environment";
         MatSortHeader,
         MatTooltipModule,
         DatePipe,
+        MatIconAnchor,
     ]
 })
 export class EventsListComponent implements OnInit, OnDestroy, AfterViewInit {

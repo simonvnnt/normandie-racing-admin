@@ -58,6 +58,11 @@
 
                                 <div class="flex flex-col">
 
+                                    <div [mat-sort-header]="'link'">Lien</div>
+                                </div>
+
+                                <div class="flex flex-col">
+
                                     <div [mat-sort-header]="'fromDate'">Date de début</div>
                                 </div>
 
@@ -93,6 +98,21 @@
                                         <a [routerLink]="[event.id, 'edit']" class="w-fit hover:underline">
                                             {{ event.name }}
                                         </a>
+
+                                        <!-- Link -->
+                                        <div>
+                                            <!-- Open link button -->
+                                            <a
+                                                mat-icon-button
+                                                [href]="event.link"
+                                                target="_blank"
+                                                [disabled]="!event.link"
+                                                matTooltip="Ouvrir le lien">
+                                                <mat-icon
+                                                    class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:arrow-top-right-on-square'"></mat-icon>
+                                            </a>
+                                        </div>
 
                                         <!-- From Date -->
                                         <div>

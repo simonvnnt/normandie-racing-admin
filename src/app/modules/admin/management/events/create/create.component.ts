@@ -17,6 +17,7 @@ import {MatButtonModule, MatIconAnchor} from "@angular/material/button";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
     selector: 'event-create',
@@ -35,7 +36,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
         MatButtonModule,
         MatProgressSpinner,
         MatAutocompleteModule,
-        MatDatepickerModule
+        MatDatepickerModule,
+        MatTooltip
     ]
 })
 export class EventCreateComponent implements OnInit {
@@ -59,6 +61,7 @@ export class EventCreateComponent implements OnInit {
 
         this.newEventForm = this.formBuilder.group({
             name: ['', Validators.required],
+            link: [''],
             fromDate: [null, Validators.required],
             toDate: [null, Validators.required],
             imagePath: [''],
